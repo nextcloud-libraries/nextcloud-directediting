@@ -6,6 +6,7 @@
     "build": "rollup --config rollup.config.js",
     "dev": "rollup --config rollup.config.js --watch",
     "check-types": "tsc --noEmit",
+    "build:doc": "typedoc --out dist/doc lib/index.ts --cleanOutputDir false && touch dist/doc/.nojekyll",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

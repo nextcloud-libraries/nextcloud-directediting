@@ -14,6 +14,8 @@ type Attributes = {
  * 	- Default: No special handling
  * 	- Print: File should be printed
  * 	- Slideshow: File should be shown in a presentation view
+ *
+ * 	@see DirectEditEmit#downloadAs
  */
 export enum DownloadType {
 	Default = 'default',
@@ -21,7 +23,10 @@ export enum DownloadType {
 	SlideShow = 'slideshow'
 }
 
-export const Emit = {
+/**
+ * Lists the functions for emitting events to the client. The handling of each event is left to the client.
+ */
+export const DirectEditEmit = {
 	/**
 	 * Informs the client that the document is being closed.
 	 */
@@ -35,7 +40,7 @@ export const Emit = {
 	 * @see DownloadType
 	 */
 	downloadAs(url: string, type: DownloadType = DownloadType.Default): void {
-		post('downloadAs', { url })
+		post('downloadAs', { url, type })
 	},
 
 	/**

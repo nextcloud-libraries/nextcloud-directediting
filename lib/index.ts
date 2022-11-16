@@ -1,2 +1,2 @@
-export { Emit as DirectEditEmit } from './emit';
-export { Listen as DirectEditListen } from './listen';
+export { DirectEditEmit, DownloadType } from './emit';
+export { DirectEditListen, Handler } from './listen';
