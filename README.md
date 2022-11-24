@@ -10,21 +10,24 @@ This library provides standardised functions for direct-editing interaction betw
 ```js
 import { DirectEditEmit, DirectEditListen } from '@nextcloud/directediting'
 
+const directEditListen = new DirectEditisten()
+const directEditEmit = new DirectEditEmit()
+
 const MyApp = {
     registerEvents() {
-        DirectEditListen.onClose(this.close)
+        directEditListen.onClose(this.close)
     },
     
     async startup() {
         this.registerEvents()
-        DirectEditEmit.loading()
+        directEditEmit.loading()
         await this.load()
-        DirectEditEmit.loaded()
+        directEditEmit.loaded()
     },
     
     close() {
         /* save changes, unmount, destroy ... */
-        DirectEditEmit.close()
+        directEditEmit.close()
     },
     
     async load() { /* load the app... */ },

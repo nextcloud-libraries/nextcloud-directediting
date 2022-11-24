@@ -1,6 +1,5 @@
 interface _Window extends Window {
 	webkit ?: any,
-	DirectEditingMobileInterface: MessagePort|undefined,
 }
 declare var window: _Window;
 
@@ -10,29 +9,39 @@ type Attributes = {
 
 /**
  * May be used to hint to the client how a file download should be handled. It is up to the clients to implement the
- * specific handling behaviour:
- * 	- Default: No special handling
- * 	- Print: File should be printed
- * 	- Slideshow: File should be shown in a presentation view
+ * specific handling behaviour.
  *
- * 	@see DirectEditEmit#downloadAs
+ * 	@link DirectEditEmit.downloadAs
  */
 export enum DownloadType {
+	/** No special handling */
 	Default = 'default',
+	/** File should be printed */
 	Print = 'print',
+	/** File should be shown in a presentation view */
 	SlideShow = 'slideshow'
 }
 
 /**
  * Lists the functions for emitting events to the client. The handling of each event is left to the client.
  */
-export const DirectEditEmit = {
+export class DirectEditEmit {
+	private readonly interfaceName: string
+
+	/**
+	 * A custom interface name may be provided. A different interface name should only be provided in exceptional cases,
+	 * such as for backward-compatibility or in cases where multiple apps are emitting events at the same time.
+	 */
+	constructor (interfaceName: string = 'NextcloudDirectEditInterface') {
+		this.interfaceName = interfaceName
+	}
+
 	/**
 	 * Informs the client that the document is being closed.
 	 */
 	close(): void {
-		post('close')
-	},
+		this.post('close')
+	}
 
 	/**
 	 * Requests the client to download the file.
@@ -40,90 +49,105 @@ export const DirectEditEmit = {
 	 * @see DownloadType
 	 */
 	downloadAs(url: string, type: DownloadType = DownloadType.Default): void {
-		post('downloadAs', { url, type })
-	},
+		this.post('downloadAs', { url, type })
+	}
 
 	/**
 	 * Request the client to rename the document.
 	 */
 	fileRename(newName: string): void {
-		post('fileRename', { newName })
-	},
+		this.post('fileRename', { newName })
+	}
 
 	/**
 	 * Request the client to follow the hyperlink.
 	 */
 	hyperlink(url: string): void {
-		post('hyperlink', { url } )
-	},
+		this.post('hyperlink', { url } )
+	}
 
 	/**
 	 * Requests the clients for an image attachment.
 	 */
 	insertImage(): void {
-		post('insertImage')
-	},
+		this.post('insertImage')
+	}
 
 	/**
 	 * Informs the client that the document is loading.
 	 */
 	loading(): void {
-		post('loading')
-	},
+		this.post('loading')
+	}
 
 	/**
 	 * Informs the client that the document has finished loading.
 	 */
 	loaded(): void {
-		post('loaded')
-	},
+		this.post('loaded')
+	}
 
 	/**
 	 * Requests the client to insert the clipboard contents.
 	 */
 	paste(): void {
-		post('paste')
-	},
+		this.post('paste')
+	}
 
 	/**
 	 * Request the client to share the document.
 	 */
 	share(): void {
-		post('share')
-	},
-}
+		this.post('share')
+	}
 
-function post(messageName: string, attributes: Attributes = {}) {
-	console.debug(`DirectEdit post: ${messageName}`, { attributes })
-	let attributesString: string|null = null
-	try {
-		attributesString = JSON.stringify(attributes)
-	} catch (e) { }
+	/**
+	 * Determines whether there is a direct-edit interface available which will listen to the emitted events.
+	 */
+	isInterfaceAvailable(): boolean {
+		return this.getInterface() !== null || this.getIOsInterface() !== null;
+	}
 
-	// Forward to mobile handler
-	if (window.DirectEditingMobileInterface && typeof window.DirectEditingMobileInterface[messageName] === 'function') {
-		if (attributesString === null || typeof attributesString === 'undefined') {
-			window.DirectEditingMobileInterface[messageName]()
-		} else {
-			window.DirectEditingMobileInterface[messageName](attributesString)
+	private post(messageName: string, attributes: Attributes = {}) {
+		let attributesString: string|null = null
+		try {
+			attributesString = JSON.stringify(attributes)
+		} catch (e) { }
+
+		// Forward to mobile handler
+		const directEditInterface = this.getInterface()
+		if (directEditInterface && typeof directEditInterface[messageName] === 'function') {
+			if (Object.keys(attributes).length === 0 || typeof attributesString === 'undefined') {
+				directEditInterface[messageName]()
+			} else {
+				directEditInterface[messageName](attributesString)
+			}
+		}
+
+		// iOS webkit fallback
+		let message: any = messageName
+		if (Object.keys(attributes).length > 0) {
+			message = {
+				MessageName: messageName,
+				Values: attributes,
+			}
+		}
+
+		const iosInterface = this.getIOsInterface()
+		if (iosInterface) {
+			iosInterface.postMessage(message)
 		}
 	}
 
-	let message: any = messageName
-	if (Object.keys(attributes).length > 0) {
-		message = {
-			MessageName: messageName,
-			Values: attributes,
-		}
+	private getInterface(): any {
+		return window[this.interfaceName] ?? null;
 	}
 
-	// iOS webkit fallback
-	if (
-		window.webkit
-		&& window.webkit.messageHandlers
-		&& window.webkit.messageHandlers.DirectEditingMobileInterface
-	) {
-		window.webkit.messageHandlers.DirectEditingMobileInterface.postMessage(message)
+	private getIOsInterface(): MessagePort|null {
+		if (!window.webkit || !window.webkit.messageHandlers) {
+			return null;
+		}
+
+		return window.webkit.messageHandlers[this.interfaceName] ?? null;
 	}
-	window.postMessage(message) // TODO: does this make sense?
 }
