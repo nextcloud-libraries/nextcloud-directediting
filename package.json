@@ -11,11 +11,11 @@
   },
   "author": "",
   "devDependencies": {
-    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-typescript": "^11.1.6",
-    "tslib": "^2.6.2",
-    "typedoc": "^0.25.8",
-    "typescript": "^5.2.2"
+    "tslib": "^2.6.3",
+    "typedoc": "^0.26.4",
+    "typescript": "^5.5.3"
   },
   "engines": {
     "node": "^20.0.0",
