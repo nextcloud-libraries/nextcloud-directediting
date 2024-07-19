@@ -5,6 +5,8 @@
 
 # @nextcloud/directediting
 
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud-libraries/nextcloud-directediting)](https://api.reuse.software/info/github.com/nextcloud-libraries/nextcloud-directediting)
+
 This library provides standardised functions for direct-editing interaction between the Nextcloud app and the clients.
 
 ## Installation
