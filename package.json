@@ -2,6 +2,10 @@
   "name": "nextcloud-direct-editing",
   "version": "1.0.0",
   "description": "Nextcloud direct-editing postmessage API",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nextcloud-libraries/nextcloud-directediting.git"
+  },
   "scripts": {
     "build": "rollup --config rollup.config.js",
     "dev": "rollup --config rollup.config.js --watch",
@@ -9,7 +13,12 @@
     "build:doc": "typedoc --out dist/doc lib/index.ts lib/directEditEmit.ts lib/directEditListen.ts --cleanOutputDir false && touch dist/doc/.nojekyll",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Nextcloud GmbH and Nextcloud contributors",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/nextcloud-libraries/nextcloud-directediting/issues"
+  },
+  "homepage": "https://github.com/nextcloud-libraries/nextcloud-directediting#readme",
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-typescript": "^11.1.6",
