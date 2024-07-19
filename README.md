@@ -1,3 +1,8 @@
+<!--
+  - SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
+
 # @nextcloud/directediting
 
 This library provides standardised functions for direct-editing interaction between the Nextcloud app and the clients.

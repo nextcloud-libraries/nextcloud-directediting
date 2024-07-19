@@ -1,4 +1,9 @@
 /**
+ * SPDX-FileCopyrightText: 2022 Nextcloud GmbH and Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
+
+/**
  * Handler function type for event handling functions.
  * @param data - The data received from the post message.
  * @see DirectEditListen
@@ -46,4 +51,3 @@ export class DirectEditListen {
 		})
 	}
 }
-
