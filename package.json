@@ -24,7 +24,7 @@
     "@rollup/plugin-typescript": "^11.1.6",
     "tslib": "^2.6.3",
     "typedoc": "^0.26.5",
-    "typescript": "^5.5.3"
+    "typescript": "^5.5.4"
   },
   "engines": {
     "node": "^20.0.0",
