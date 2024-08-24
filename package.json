@@ -22,7 +22,7 @@
   "devDependencies": {
     "@rollup/plugin-replace": "^5.0.7",
     "@rollup/plugin-typescript": "^11.1.6",
-    "tslib": "^2.6.3",
+    "tslib": "^2.7.0",
     "typedoc": "^0.26.5",
     "typescript": "^5.5.4"
   },
